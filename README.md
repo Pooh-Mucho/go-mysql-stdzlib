@@ -4,7 +4,7 @@ Enable compress protocol:
 ```go
 import (
     "database/sql"
-    _ "github.com/Pooh-Mucho/mysql"
+    _ "github.com/Pooh-Mucho/go-mysql-stdzlib"
 )
 ...
 db, err := sql.Open("mysql", "username:password@tcp(ip_addr)/dbname?compress=true"
