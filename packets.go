@@ -396,6 +396,7 @@ func (mc *mysqlConn) writeHandshakeResponsePacket(authResp []byte, plugin string
 			return err
 		}
 		// Haiyang
+		
 		// Switch to TLS
 		tlsConn := tls.Client(mc.netConn, mc.cfg.tls)
 		if err := tlsConn.Handshake(); err != nil {
