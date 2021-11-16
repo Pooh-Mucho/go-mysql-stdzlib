@@ -262,7 +262,7 @@ func (pc *packetCompressor) writePacket(mc *mysqlConn, packet []byte) (int, erro
 		var remain = len(packet) - index
 		var bytesWritten int
 
-		bytesWritten, err = pc.writeToBuffer(packet[index:], mc.compressionSequence, remain < minCompressSize)
+		bytesWritten, err = pc.writeToBuffer(packet[index:], mc.compressionSequence, remain > minCompressSize)
 		if err != nil {
 			return index, err
 		}
