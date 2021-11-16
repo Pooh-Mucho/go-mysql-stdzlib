@@ -385,10 +385,17 @@ func (mc *mysqlConn) writeHandshakeResponsePacket(authResp []byte, plugin string
 	// http://dev.mysql.com/doc/internals/en/connection-phase-packets.html#packet-Protocol::SSLRequest
 	if mc.cfg.tls != nil {
 		// Send TLS / SSL request packet
+		/*
 		if err := mc.writePacket(data[:(4+4+1+23)+4]); err != nil {
 			return err
 		}
-
+		*/
+		// Haiyang
+		// For ssl handleshake ,always use non-compress
+		if err := mc.transceiver.writePacket(mc, data[:(4+4+1+23)+4], false); err != nil {
+			return err
+		}
+		// Haiyang
 		// Switch to TLS
 		tlsConn := tls.Client(mc.netConn, mc.cfg.tls)
 		if err := tlsConn.Handshake(); err != nil {
@@ -443,7 +450,11 @@ func (mc *mysqlConn) writeAuthSwitchPacket(authData []byte) error {
 
 	// Add the auth data [EOF]
 	copy(data[4:], authData)
-	return mc.writePacket(data)
+	// Haiyang
+	// Always use non-compress
+	return mc.transceiver.writePacket(mc, data, false)
+	// Haiyang
+	//return mc.writePacket(data)
 }
 
 /******************************************************************************
